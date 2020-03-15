@@ -1,0 +1,35 @@
+server:
+  port: 8660
+
+---
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false #表示是否将自己注册到Eureka Server
+    fetchRegistry: false #表示是否从Eureka Server获取注册信息
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8660
+  server:
+    enable-self-preservation: false # 自我保护模式,处理网络分区异常情况
+    eviction-interval-timer-in-ms: 6000
+    response-cache-update-interval-ms: 10
+
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS #health endpoint是否必须显示全部细节
+  endpoints:
+    web:
+      exposure:
+        include: "*" #暴露所有的端点我们可以看到更多的服务实例相关信息
+        exclude: env
+    jmx:
+      exposure:
+        include: "*"
+        exclude: env

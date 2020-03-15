@@ -1,0 +1,55 @@
+server:
+  port: 8766
+spring:
+  application:
+    name: ADC-admin
+  profiles:
+    active:
+      - secure
+debug: true
+
+info:
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    health-check-url-path: /actuator/health
+  client:
+    registryFetchIntervalSeconds: 15
+    serviceUrl:
+      defaultZone: http://localhost:8660/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+security2:
+  user:
+    name: sa
+    password: sa
+
+---
+spring:
+  profiles: insecure
+
+---
+spring:
+  profiles: secure
+  security:
+    user:
+      name: ${security2.user.name}
+      password: ${security2.user.password}
+eureka:
+  instance:
+    metadata-map:
+      user.name: ${security2.user.name}
+      user.password: ${security2.user.password}

@@ -1,0 +1,109 @@
+spring:
+  application:
+    name: spring-cloud-permission
+
+server:
+  port: 9002
+  servlet:
+    session:
+      cookie:
+        name: ADC
+        max-age: 36000
+      timeout: 36000
+
+---
+spring:
+  session:
+    store-type: redis
+---
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/permission?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+---
+spring:
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+redis:
+  hostName: 127.0.0.1
+  port: 6379
+  password:
+  database: 0
+  timeout: 10000
+  maxIdle: 300
+  maxTotal: 1000
+  maxWaitMillis: 1000
+  minEvictableIdleTimeMillis: 300000
+  numTestsPerEvictionRun: 1024
+  timeBetweenEvictionRunsMillis: 30000
+  testOnBorrow: true
+  testWhileIdle: true
+  
+  
+---
+spring:
+  sleuth:
+    sampler:
+      percentage: 1.0
+  zipkin:
+    base-url: http://localhost:8960
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Chongqing
+  session:
+    store-type: redis
+
+eureka:
+  instance:
+    statusPageUrlPath: http://localhost:${server.port}/info
+    healthCheckUrlPath: http://localhost:${server.port}/actuator/health
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8660/eureka/
+
+zuul:
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: service-ribbon
+    api-b:
+      path: /api-b/**
+      serviceId: service-feign
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS #health endpoint是否必须显示全部细节
+  endpoints:
+    web:
+      exposure:
+        include: "*" #暴露所有的端点我们可以看到更多的服务实例相关信息，
+        exclude: env
+    jmx:
+      exposure:
+        include: "*"
+        exclude: env
