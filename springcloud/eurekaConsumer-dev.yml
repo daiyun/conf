@@ -10,12 +10,12 @@ debug: true
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8660/eureka/
+      defaultZone: http://spring-app:8660/eureka/
     healthcheck:
       enabled: true
   instance:
-    statusPageUrlPath: http://localhost:${server.port}/info
-    healthCheckUrlPath: http://localhost:${server.port}/health
+    statusPageUrlPath: http://spring-app:${server.port}/info
+    healthCheckUrlPath: http://spring-app:${server.port}/health
     lease-expiration-duration-in-seconds: 30
     lease-renewal-interval-in-seconds: 10
 

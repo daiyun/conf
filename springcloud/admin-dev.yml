@@ -21,7 +21,7 @@ eureka:
   client:
     registryFetchIntervalSeconds: 15
     serviceUrl:
-      defaultZone: http://localhost:8660/eureka/
+      defaultZone: http://spring-app:8660/eureka/
 
 management:
   endpoint:
