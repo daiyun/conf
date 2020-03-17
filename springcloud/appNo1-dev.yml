@@ -1,9 +1,9 @@
 server:
-  port: 8762
+  port: 9001
 
 spring:
   application:
-    name: eureka-consumer-dev
+    name: springcloud-eureka-appNo1
 debug: false
 
 eureka:
